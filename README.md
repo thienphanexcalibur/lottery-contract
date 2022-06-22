@@ -1,6 +1,4 @@
-# Basic Sample Hardhat Project
-
-Lottery smart contract
+## Lottery smart contract
 
 ```shell
 # Spawn local hardhat blocklchain network
