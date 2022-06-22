@@ -2,8 +2,17 @@ import { use } from "chai";
 import { task } from "hardhat/config";
 import type { HardhatUserConfig } from "hardhat/config";
 
+import "@openzeppelin/hardhat-upgrades";
+
 import chaiAsPromise from "chai-as-promised";
 use(chaiAsPromise);
+
+// Import env
+import "dotenv/config";
+
+const { GOERLI_END_POINT, ALCHEMY_API_KEY, GOERLI_PRIVATE_KEY } = process.env;
+
+console.log(GOERLI_END_POINT, ALCHEMY_API_KEY, GOERLI_PRIVATE_KEY);
 
 import "@nomiclabs/hardhat-waffle";
 
@@ -24,7 +33,15 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 const config: HardhatUserConfig = {
-  solidity: "0.8.7",
+  solidity: {
+    version: "0.8.7",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 1000,
+      },
+    },
+  },
   networks: {
     hardhat: {
       accounts: {
@@ -32,11 +49,11 @@ const config: HardhatUserConfig = {
           "slow menu plunge actress table best grit eye unique auto option hover",
       },
     },
-  },
-  settings: {
-    optimizer: {
-      enabled: true,
-      runs: 1000,
+    goerli: {
+      url: `${GOERLI_END_POINT}/${ALCHEMY_API_KEY}`,
+      accounts: [`${GOERLI_PRIVATE_KEY}`],
+      gas: 2100000,
+      gasPrice: 8000000000,
     },
   },
 };

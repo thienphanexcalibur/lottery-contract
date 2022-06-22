@@ -9,8 +9,6 @@ contract Lottery is Ownable {
         address playerAddress;
     }
 
-    uint test = 1;
-
     Player[] players;
 
     mapping(address => bool) addressToIsEntered;
@@ -22,7 +20,7 @@ contract Lottery is Ownable {
     event PICK_WINNER(address indexed winner);
 
     event TRANSFERED_WINNER_PRIZE(address indexed winner, uint amount);
-   
+
     function getPrizePool() public view returns(uint) {
         return address(this).balance;
     }
