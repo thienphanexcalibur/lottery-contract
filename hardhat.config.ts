@@ -10,7 +10,8 @@ use(chaiAsPromise);
 // Import env
 import "dotenv/config";
 
-const { GOERLI_END_POINT, ALCHEMY_API_KEY, GOERLI_PRIVATE_KEY } = process.env;
+const { GOERLI_END_POINT, ALCHEMY_API_KEY, GOERLI_PRIVATE_KEY, TEST_MNEMONIC } =
+  process.env;
 
 console.log(GOERLI_END_POINT, ALCHEMY_API_KEY, GOERLI_PRIVATE_KEY);
 
@@ -45,8 +46,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       accounts: {
-        mnemonic:
-          "slow menu plunge actress table best grit eye unique auto option hover",
+        mnemonic: TEST_MNEMONIC,
       },
     },
     goerli: {

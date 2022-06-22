@@ -1,15 +1,15 @@
 # Basic Sample Hardhat Project
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
-
-Try running some of the following tasks:
+Lottery smart contract
 
 ```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
+# Spawn local hardhat blocklchain network
 npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
+
+# Deploy the Lottery contract to the local network
+npx hardhat run --network localhost scripts/deploy.js
+
+# Deploy the contract to testnet (Goerli) Alchemy in hardhat.config.js 
+npx hardhat run --network goerli scripts/deploy.js
+
 ```
