@@ -21,18 +21,22 @@ contract Lottery is Ownable {
 
     event TRANSFERED_WINNER_PRIZE(address indexed winner, uint amount);
 
-    function getPrizePool() public view returns(uint) {
+    event COMMIT(address indexed commitAddress, uint amount);
+
+    function getPrizePool() public view returns (uint) {
         return address(this).balance;
     }
 
     function enter() public payable {
         require(!addressToIsEntered[msg.sender], "Player has entered");
-        require(msg.value >= (0.001 * 1 ether), "Must be bigger than 0.001 to participate");
+        require(
+            msg.value >= (0.001 * 1 ether),
+            "Must be bigger than 0.001 to participate"
+        );
 
-        players.push(Player({
-            amount: msg.value,
-            playerAddress: msg.sender
-        }));
+        players.push(Player({amount: msg.value, playerAddress: msg.sender}));
+
+        emit COMMIT(msg.sender, msg.value);
 
         addressToIsEntered[msg.sender] = true;
 
@@ -40,7 +44,12 @@ contract Lottery is Ownable {
     }
 
     function random() public view returns (uint) {
-        return uint(keccak256(abi.encode(block.difficulty, block.timestamp, players))) % players.length;
+        return
+            uint(
+                keccak256(
+                    abi.encode(block.difficulty, block.timestamp, players)
+                )
+            ) % players.length;
     }
 
     function transferAllMoneyToWinner(address payable _address) internal {
@@ -50,7 +59,7 @@ contract Lottery is Ownable {
         require(success, "Transfer the prize pool to winner");
     }
 
-    function pickWinner() public onlyOwner() {
+    function pickWinner() public onlyOwner {
         uint randomIndex = random();
         address randomizedAddress = players[randomIndex].playerAddress;
         winnerAddress = randomizedAddress;
@@ -58,12 +67,12 @@ contract Lottery is Ownable {
         transferAllMoneyToWinner(payable(winnerAddress));
     }
 
-    function getPlayer(address _address) public view returns (uint amount)  {
-       for(uint i=0; i < players.length; i++) {
-           if (players[i].playerAddress == _address) {
-               amount = players[i].amount;
-           }
-       }
+    function getPlayer(address _address) public view returns (uint amount) {
+        for (uint i = 0; i < players.length; i++) {
+            if (players[i].playerAddress == _address) {
+                amount = players[i].amount;
+            }
+        }
     }
 
     receive() external payable {

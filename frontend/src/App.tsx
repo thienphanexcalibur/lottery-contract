@@ -18,9 +18,11 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import useMetaMask from "./hooks/useMetamask";
-import { BigNumber, Contract, ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
+import type { Lottery } from "../../typechain-types";
+import useError from "./hooks/useError";
 
-const CONTRACT_ADDRESS = "0x17AcFDad59451a07cf0C1921B2e6A898cdEb7755";
+const CONTRACT_ADDRESS = "0xCE260453e485d57eF5E07533D7CFBc2E5F9fF0eB";
 
 interface CommitHistory {
   amount: string;
@@ -33,9 +35,12 @@ interface WinnerHistory {
 
 const App = () => {
   const toast = useToast();
+
+  useError();
+
   const { connectWallet, account, disconnectWallet, provider } = useMetaMask();
 
-  const [contract, setContract] = useState<Contract>(null);
+  const [contract, setContract] = useState<Lottery>();
 
   const [owner, setOwner] = useState<string>("");
 
@@ -64,7 +69,7 @@ const App = () => {
         CONTRACT_ADDRESS,
         LotteryABI.abi,
         provider
-      );
+      ) as Lottery;
 
       lotteryContract.on("TRANSFERED_WINNER_PRIZE", (address, amount) => {
         setWinner({
@@ -72,6 +77,7 @@ const App = () => {
           address,
         });
       });
+
       setContract(lotteryContract);
     };
     if (provider) {
@@ -80,13 +86,20 @@ const App = () => {
   }, [provider]);
 
   useEffect(() => {
+    if (contract) {
+      contract.queryFilter("COMMIT").then((events) => {
+        console.log(events);
+      });
+    }
+  }, [contract]);
+
+  useEffect(() => {
     const getPrizePool = async () => {
       const data: BigNumber = await contract.getPrizePool();
       setPrizePool(ethers.utils.formatEther(data.toString()).toString());
     };
     const getOwner = async () => {
       const data: string = await contract.owner();
-      console.log(data)
       setOwner(data);
     };
 
@@ -107,7 +120,7 @@ const App = () => {
           getCommitHistory();
         }
       }
-    } catch (e) {
+    } catch (e: any) {
       toast({
         title: "Lottery",
         description: JSON.stringify(e.message),

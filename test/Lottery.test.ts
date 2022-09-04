@@ -1,3 +1,4 @@
+import { Lottery } from "./../typechain-types/contracts/Lottery";
 import { expect } from "chai";
 import type { BigNumber, Contract, Signer } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
@@ -24,7 +25,7 @@ const participate = async ({
   });
 
 describe("Lottery", async function () {
-  let lottery: Contract;
+  let lottery: Lottery;
 
   before(async () => {
     const Lottery = await ethers.getContractFactory("Lottery");

@@ -3,7 +3,7 @@
 //
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
-import hre, {upgrades} from "hardhat";
+import hre, { upgrades } from "hardhat";
 
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
@@ -16,7 +16,7 @@ async function main() {
   // We get the contract to deploy
   const Lottery = await hre.ethers.getContractFactory("Lottery");
 
-  const lottery = await Lottery.deploy()
+  const lottery = await Lottery.deploy();
 
   // const lottery = await upgrades.deployProxy(Lottery)
 

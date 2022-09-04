@@ -3,6 +3,9 @@ import { task } from "hardhat/config";
 import type { HardhatUserConfig } from "hardhat/config";
 
 import "@openzeppelin/hardhat-upgrades";
+import "@nomiclabs/hardhat-ganache";
+
+import '@typechain/hardhat'
 
 import chaiAsPromise from "chai-as-promised";
 use(chaiAsPromise);
@@ -12,8 +15,6 @@ import "dotenv/config";
 
 const { GOERLI_END_POINT, ALCHEMY_API_KEY, GOERLI_PRIVATE_KEY, TEST_MNEMONIC } =
   process.env;
-
-console.log(GOERLI_END_POINT, ALCHEMY_API_KEY, GOERLI_PRIVATE_KEY);
 
 import "@nomiclabs/hardhat-waffle";
 

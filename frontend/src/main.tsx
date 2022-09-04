@@ -1,11 +1,25 @@
-import { ChakraProvider } from "@chakra-ui/react";
+import {
+  ChakraProvider,
+  extendTheme,
+  type ThemeConfig,
+} from "@chakra-ui/react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 
 const rootNode = document.getElementById("root")!;
 const root = createRoot(rootNode);
+
+// 2. Add your color mode config
+const config: ThemeConfig = {
+  initialColorMode: "dark",
+  useSystemColorMode: true,
+};
+
+// 3. extend the theme
+const theme = extendTheme({ config });
+
 root.render(
-  <ChakraProvider>
+  <ChakraProvider theme={theme}>
     <App />
   </ChakraProvider>
 );
